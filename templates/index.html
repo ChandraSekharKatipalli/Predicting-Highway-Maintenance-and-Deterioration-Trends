@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IRI Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 150px; 
+            background-color: #b3e3f3;
+        }
+
+        .header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='HighwayImage.png') }}");
+            background-size: cover;                    /* Auto zoom to fit without stretching */
+            background-repeat: no-repeat;
+            background-position: center center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 1000;
+            text-align: center;
+            color: white;
+            padding-top: 30px;
+        }
+
+        .form-container {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: white;
+        }
+
+        select, input[type=submit] {
+            padding: 8px;
+            width: 200px;
+            margin-top: 5px;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            padding-top: 200px;
+        }
+
+        .table-container, .graph-container {
+            width: 45%;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        iframe.map-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+            margin-top: 20px;
+        }
+        
+        .map-container {
+            width: 70%;
+            margin: 20px auto;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        .graph-area {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #sectionForm {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>IRI Prediction</h1>
+        <form method="POST">
+            <div class="form-container">
+                <div class="section">
+                    <label for="route_id">Route selection</label>
+                    <select name="route_id" onchange="this.form.submit()">
+                        <option value="">Select Route</option>
+                        {% for r in route_ids %}
+                            <option value="{{ r }}" {% if r in request.form.get('route_id', '') %}selected{% endif %}>{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                {% if begins %}
+                <div class="section">
+                    <label for="begin_poin">Section selection</label>
+                    <select name="begin_poin" multiple size="5">
+                        {% for b in begins %}
+                            <option value="{{ b }}" {% if b in request.form.getlist('begin_poin') %}selected{% endif %}>{{ b }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Predict">
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="content">
+        <div class="table-container">
+            {% if table %}
+                <h3>Prediction Table</h3>
+                <table>
+                    <tr><th>ROUTE_ID</th><th>BEGIN_POIN</th><th>END_POINT</th><th>Predicted IRI</th></tr>
+                    {% for row in table %}
+                        <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td><td>{{ '%.2f'|format(row[3]) }}</td></tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+        
+        <div class="graph-area">
+            {% if selected_begins|length > 1 %}
+            <form id="sectionForm">
+                <input type="hidden" name="route_id" id="route_id" value="{{ selected_route }}">
+                <label for="begin_poin">Select a Section</label>
+                <select name="begin_poin" id="begin_poin" onchange="submitSectionForm()">
+                    <option value="">-- Select a Section --</option>
+                    {% for b in selected_begins %}
+                        <option value="{{ b }}">{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            {% endif %}
+
+            <div id="graphContainer">
+                {% if graph %}
+                <h3>Graph</h3>
+                <img src="{{ url_for('static', filename='iri_plot.png') }}?t={{ timestamp }}" style="width: 100%; height: auto;" />
+                {% endif %}
+            </div>
+        </div>
+        <script>
+            function submitSectionForm() {
+                const formData = new FormData(document.getElementById('sectionForm'));
+            
+                fetch('/update_graph', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('graphContainer').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                // Update map
+                fetch('/update_map', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('mapFrame').src = data.map_url;
+                    }
+                })
+                .catch(error => console.error('Map Error:', error));
+
+            }
+        </script>
+    </div>
+
+    {% if map_html %}
+    <div class="map-container">
+        <iframe class="map-frame" id="mapFrame" src="{{ url_for('static', filename=map_html) }}"></iframe>
+    </div>
+    {% endif %}
+</body>
+</html>

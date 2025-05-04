@@ -1,0 +1,9 @@
+Flask==2.3.2
+gunicorn
+pandas
+numpy
+matplotlib
+seaborn
+folium
+tensorflow
+joblib
