@@ -7,3 +7,4 @@ seaborn
 folium
 tensorflow
 joblib
+scikit-learn
