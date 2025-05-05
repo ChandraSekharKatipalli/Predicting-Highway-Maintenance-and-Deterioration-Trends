@@ -14,13 +14,25 @@ We fused data from the **Highway Performance Monitoring System (HPMS)** and the 
 
 ## 📊 Data Description
 
-The project uses a cleaned and processed version of longitudinal transportation data sourced from HPMS and FAF. Key features include:
+The project uses combined transportation datasets derived from the **Highway Performance Monitoring System (HPMS)** and the **Freight Analysis Framework (FAF)** for the years 2013 to 2022. Below are the key features used in the modeling process:
 
-- `ROUTE_ID`: Unique identifier for each highway route  
-- `BEGIN_POIN`, `END_POIN`: Starting and ending mile markers  
-- `AADT`: Annual Average Daily Traffic  
-- `IRI_VN`: International Roughness Index (target variable)  
-- `VEHICLE_TONS`, `TRUCK_PCT`, `ROAD_CURVE_DEGREE`  
+| Feature         | Description                                                                 |
+|-----------------|-----------------------------------------------------------------------------|
+| `dms_orig`      | Origin FAF region (where freight movement begins)                           |
+| `dms_dest`      | Destination FAF region (where freight movement ends)                        |
+| `dms_mode`      | Mode of Transport (e.g., Truck, Rail, Air, Water)                           |
+| `curval`        | Current freight value on the segment                                        |
+| `tmiles`        | Ton-miles (freight volume × distance traveled)                              |
+| `tons`          | Freight volume (in tons)                                                    |
+| `value`         | Monetary value of the freight transported                                   |
+| `IRI_VN`        | International Roughness Index (used as the target variable)                |
+| `AADT_VN`       | Annual Average Daily Traffic (vehicle volume)                              |
+| `IS_IMPROVED`   | Flag indicating if the segment was improved since the previous year         |
+| `THROUGH_LA`    | Number of through lanes on the road segment                                 |
+| `SPEED_LIMI`    | Posted speed limit for the road segment                                     |
+
+These features were selected for their relevance to pavement deterioration and freight movement patterns across the national highway system.
+
 - Year range: **2013 to 2022**
 
 The dataset was preprocessed to align measurements over time and enable time series modeling at a per-section level.
