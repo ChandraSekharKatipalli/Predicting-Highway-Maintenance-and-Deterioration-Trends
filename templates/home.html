@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Highway IRI Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef6fb;
+            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 150px 20px 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        .predict-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background-color: #007acc;
+            color: white;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            width: 200px;
+        }
+
+        .section {
+            margin-top: 40px;
+            border: 2px solid #333;
+            padding: 20px;
+            background: white;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 5px;
+            font-size: 22px;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-align: left;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid #333;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            Predicting Highway maintenance and deterioration trends using <br>International Roughness Index (IRI)
+        </h1>
+        <a href="/predict" class="predict-btn">Predict (IRI)</a>
+        <div class="credits">
+            <p>Project by:<br>
+            Chandra Sekhar Katipalli<br>
+            Sindura Reddy Challa<br>
+            Sanjana Reddy Soma</p>
+        </div>
+    </div>
+    
+
+    <div class="container">
+        <div class="section">
+            <div class="section-title">About Project</div>
+            <p>So, our project is all about trying to get better at predicting when highways are going to need repairs. It's a big deal because, as you can imagine, it's super important to keep roads in good shape for safety and to save money on fixing them. The problem is, a lot of times, people just look at one set of data, like how rough the road is, which doesn't tell the whole story. We thought, "What if we combine different data sources? <br> <br>
+                That's where the "data fusion" comes in. We're taking data from the Highway Performance Monitoring System (HPMS) and the Freight Analysis Framework (FAF) - basically, info on road conditions and freight movement in the state of Alabama. We're using data from 2013 to 2022, and then we're going to use machine learning to build a model that can predict how the roads will deteriorate. 
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Data Description</div>
+            <table>
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>dms_orig</code></td>
+                    <td>Origin FAF region (where freight movement begins)</td>
+                  </tr>
+                  <tr>
+                    <td><code>dms_dest</code></td>
+                    <td>Destination FAF region (where freight movement ends)</td>
+                  </tr>
+                  <tr>
+                    <td><code>dms_mode</code></td>
+                    <td>Mode of Transport (e.g., Truck, Rail, Air, Water)</td>
+                  </tr>
+                   <tr>
+                    <td><code>curval</code></td>
+                    <td>Current freight value on the segment</td>
+                  </tr>
+                  <tr>
+                    <td><code>tmiles</code></td>
+                    <td>Ton-miles (freight volume × distance traveled)</td>
+                  </tr>
+                  <tr>
+                    <td><code>tons</code></td>
+                    <td>Freight volume (in tons)</td>
+                  </tr>
+                  <tr>
+                    <td><code>value</code></td>
+                    <td>Monetary value of the freight transported</td>
+                  </tr>
+                  <tr>
+                    <td><code>IRI_VN</code></td>
+                    <td>International Roughness Index (used as the target variable)</td>
+                  </tr>
+                  <tr>
+                    <td><code>AADT_VN</code></td>
+                    <td>Annual Average Daily Traffic (vehicle volume)</td>
+                  </tr>
+                  <tr>
+                    <td><code>IS_IMPROVED</code></td>
+                    <td>Flag indicating if the segment was improved since the previous year</td>
+                  </tr>
+                  <tr>
+                    <td><code>THROUGH_LA</code></td>
+                    <td>Number of through lanes on the road segment</td>
+                  </tr>
+                  <tr>
+                    <td><code>SPEED_LIMI</code></td>
+                    <td>Posted speed limit for the road segment</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>These features were selected for their relevance to pavement deterioration and freight movement patterns across the national highway system.</p>
+
+              <p>Year range: 2013 to 2022</p>
+              <p>The dataset was preprocessed to align measurements over time and enable time series modeling at a per-section level.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">How it is useful</div>
+            <p>Data fusion in highway maintenance and deterioration prediction offers benefits to various stakeholders: transportation agencies can achieve proactive and cost-effective maintenance, governments and policymakers can make informed decisions about infrastructure investment, the public experiences improved safety and reduced disruptions, researchers advance the field of predictive maintenance, and the freight industry benefits from more efficient transportation networks.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Limitations</div>
+            <p>
+                Currently, the machine learning model has been trained using data limited to select road segments,
+                specifically <b>Interstate highways within the state of Alabama</b>. As such, its predictive accuracy is optimized for those regions and may not generalize to other states or rural/local road systems. Expansion to national datasets is a potential future enhancement.
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">GitHub Repository</div>
+            <p>
+                You can find the complete source code, model files, and deployment pipeline on our GitHub repository:
+                <br><br>
+                🔗 <a href="https://github.com/ChandraSekharKatipalli/Predicting-Highway-Maintenance-and-Deterioration-Trends/" target="_blank">github.com/ChandraSekharKatipalli/Predicting-Highway-Maintenance-and-Deterioration-Trends/</a>
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Contact Information</div>
+            <p>
+                For questions, collaboration, or feedback, please contact us:
+            </p>
+            <ul>
+                <li><strong>Chandra Sekhar Katipalli</strong> - gr50572@umbc.com</li>
+                <li><strong>Sindura Reddy Challa</strong> - schalla6@umbc.com</li>
+                <li><strong>Sanjana Reddy Soma</strong> - wl18137@umbc.edu.com</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

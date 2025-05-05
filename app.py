@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask import jsonify, render_template_string
+from flask import redirect
 import pandas as pd
 import numpy as np
 import folium
@@ -38,7 +39,7 @@ def create_sequences_from_df(data, input_features, window_size=8):
         sequences.append(seq)
     return np.array(sequences)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def index():
     route_ids = sorted(df['ROUTE_ID'].unique())
     begins, map_html, table_rows = [], None, []
@@ -219,6 +220,13 @@ def update_map():
         print(f"Map update error: {e}")
         return jsonify(success=False)
 
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
+@app.route('/')
+def root():
+    return redirect('/home')
 
 if __name__ == '__main__':
     app.run(debug=True)
