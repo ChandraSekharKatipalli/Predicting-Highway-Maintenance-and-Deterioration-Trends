@@ -129,6 +129,31 @@ View the live deployed application on Google Cloud Run here:
 
 ---
 
+## Demo Screenshots 
+On the home page you find information about our project such as introduction, data description, and usage.
+![image](https://github.com/user-attachments/assets/b950df7e-0167-4b51-83f0-23929dd8f6ff)
+
+once user clicks on **Predict IRI**, user will be redirected to Prediction page.
+![image](https://github.com/user-attachments/assets/2ad4c0b1-9797-4b34-9183-061fbe7f34e5)
+
+
+On the above page user can select a route from the route selection dropdown.
+And section or sections from the section selection.
+![image](https://github.com/user-attachments/assets/c2b5402e-95e7-4419-ac4e-b142dbd0f522)
+
+and then click on predict
+
+![image](https://github.com/user-attachments/assets/c00904a1-bd0e-4e03-964e-3e1cdd073d22)
+
+for more insights on specfic segements user can select from dropdown
+
+
+
+
+
+
+
+
 ## 🤝 Contributing
 
 We welcome contributions! Here's how to get started:
