@@ -12,6 +12,17 @@ We fused data from the **Highway Performance Monitoring System (HPMS)** and the 
 
 ---
 
+## 🔗 Data Sources
+
+The data used in this project comes from publicly available transportation datasets:
+
+- 📦 [Freight Analysis Framework (FAF) – Bureau of Transportation Statistics](https://www.bts.gov/faf)
+- 🛣️ [Highway Performance Monitoring System (HPMS) – Federal Highway Administration](https://www.fhwa.dot.gov/policyinformation/hpms.cfm)
+
+These sources provide essential information on freight movement, roadway usage, traffic metrics, and pavement conditions across the U.S.
+
+---
+
 ## 📊 Data Description
 
 The project uses combined transportation datasets derived from the **Highway Performance Monitoring System (HPMS)** and the **Freight Analysis Framework (FAF)** for the years 2013 to 2022. Below are the key features used in the modeling process:
